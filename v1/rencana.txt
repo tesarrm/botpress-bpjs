@@ -1,0 +1,193 @@
+# informasi
+cek-status-kepesertaan.php
+cek-status-pembayaran.php
+cek-virtual-acount.php
+skrining-kesehatan.php
+info-jkn.php
+panduan-layanan.php
+cari-lokasi.php
+
+
+================
+
+## cek-status-kepesertaan
+
+id
+nama_peserta
+jenis_peserta
+perjanjian
+status_peserta : boolean 
+
+--
+
+## cek-status-pembayaran
+
+--
+
+## cek-virtual-acount
+
+--
+
+## skrining-kesehatan
+
+text-skrining-kesehatan
+
+--
+
+## info-jkn
+
+img-info-jkn
+tipe : JKN || REHAB
+
+--
+
+## panduan-layanan
+
+file-panduan-layanan
+
+--
+
+## cari-lokasi
+
+teks-lokasi-cabang
+teks-lokasi-faskes
+
+
+tbl =====
+
+# pengguna
+# informasi
+# info-jkn
+
+
+
+## ===== response api
+
+cek-status-kepesertaan
+{
+    [
+        {
+            nama_peserta,
+            jenis_peserta,
+            perjanjian,
+            status_perserta
+        },
+       .... 
+    ]
+}
+
+cek-status-pembayaran
+{
+    [
+        {
+            nama_peserta,
+            tagihan,
+            status_pembayaran
+        },
+        ....
+    ]
+}
+
+cek-virtual-acount
+{
+
+}
+
+skrining-kesehatan
+// langsung di botpress
+
+info-jkn-panduan-layanan
+{
+    tipe-info-jkn (mobile jkn, pandawa),
+    file-url,
+}
+
+cari-lokasi
+// botpress
+
+
+
+===================
+===================
+TABLE
+===================
+
+
+perserta
+    id
+    nik
+    ttl
+    nama_peserta
+    jenis_peserta
+    perjanjian
+    status_perserta
+
+pembayaran
+    peserta_id : fk peserta
+    tagihan
+    status_pembayaran
+
+info-jkn-panduan-layanan
+    tipe-info-jkn (mobile jkn, pandawa)
+    file-url
+
+
+
+    =================================
+
+CREATE TABLE peserta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nik VARCHAR(50) UNIQUE, -- tambahkan UNIQUE untuk mencegah duplikasi
+    nik_kepala_keluarga VARCHAR(50),
+    ttl DATE,
+    nama_peserta VARCHAR(100),
+    jenis_peserta VARCHAR(50),
+    status_peserta VARCHAR(20) -- typo di sini: seharusnya "status_peserta" bukan "status_perserta"
+);
+
+CREATE TABLE pembayaran (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nik_kepala_keluarga VARCHAR(50),
+    FOREIGN KEY (nik_kepala_keluarga) REFERENCES peserta(nik),
+    tagihan DECIMAL(10, 2),
+    status_pembayaran VARCHAR(20)
+);
+
+CREATE TABLE virtual_account( -- ubah nama tabel dari "virtual_acount" menjadi "virtual_account"
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    bank VARCHAR(50),
+    virtual_account VARCHAR(50), -- perbaiki penulisan "virtual_account"
+    nik_kepala_keluarga VARCHAR(50),
+    FOREIGN KEY (nik_kepala_keluarga) REFERENCES peserta(nik)
+);
+
+CREATE TABLE info_jkn_panduan_layanan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipe_info_jkn VARCHAR(50),
+    file_url VARCHAR(255)
+);
+
+
+=====
+
+INSERT INTO peserta (nik, nik_kepala_keluarga, ttl, nama_peserta, jenis_peserta, status_peserta)
+VALUES ('1234567890', '1234567890', '2000-01-01', 'Ayah Keluarga 1', 'Ayah', 'Aktif'),
+       ('2345678901', '1234567890', '2005-01-01', 'Anak 1 Keluarga 1', 'Anak', 'Aktif'),
+       ('3456789012', '1234567890', '2008-01-01', 'Anak 2 Keluarga 1', 'Anak', 'Aktif');
+
+INSERT INTO peserta (nik, nik_kepala_keluarga, ttl, nama_peserta, jenis_peserta, status_peserta)
+VALUES ('4567890123', '4567890123', '1980-01-01', 'Ayah Keluarga 2', 'Ayah', 'Aktif'),
+       ('5678901234', '4567890123', '1985-01-01', 'Ibu Keluarga 2', 'Ibu', 'Aktif'),
+       ('6789012345', '4567890123', '2010-01-01', 'Anak 1 Keluarga 2', 'Anak', 'Aktif'),
+       ('7890123456', '4567890123', '2015-01-01', 'Anak 2 Keluarga 2', 'Anak', 'Aktif');
+
+INSERT INTO peserta (nik, nik_kepala_keluarga, ttl, nama_peserta, jenis_peserta, status_peserta)
+VALUES ('8901234567', '8901234567', '1970-01-01', 'Ayah Keluarga 3', 'Ayah', 'Aktif'),
+       ('9012345678', '8901234567', '1975-01-01', 'Ibu Keluarga 3', 'Ibu', 'Aktif');
+
+
+
+
+
+
+
